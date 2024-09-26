@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sentiment Analyzer</title>
+</head>
+<body>
+    <h1>Sentiment Analysis</h1>
+    <p>provide a comment and see if it is negative or positive.</p>
+    <form action="/analyze" id="submission">
+        <input type="text" id="review_input" name="review_input" placeholder="Enter message here">
+        <button type="submit">Submit</button>
+    </form>
+
+    <p id="output">test value</p> 
+
+    <script>
+        const form_submit = document.getElementById("submission")
+        const output_p = document.getElementById("output")
+
+        form_submit.addEventListener('submit',async (e) => {
+            e.preventDefault();
+
+            const user_input = document.getElementById("review_input").value;
+
+            document.getElementById("review_input").value = '';
+
+            const response = await fetch('/analyze', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: `text=${encodeURIComponent(user_input)}`,
+            });
+
+            const sentiment = await response.json();
+
+            output_p.textContent = sentiment;
+        })
+    </script>
+</body>
+</html>
